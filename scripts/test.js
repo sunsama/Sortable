@@ -18,4 +18,3 @@ createTestCafe().then((tc) => {
 	console.log('FAILED COUNT', actualFailedCount)
     return testcafe.close();
 }).then(() => process.exit(failedCount));
-

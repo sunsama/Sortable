@@ -2596,100 +2596,6 @@
     pluginName: 'removeOnSpill'
   });
 
-  let swapValidEl;
-  function SwapPlugin() {
-    class Swap {
-      constructor() {
-        this.defaults = {
-          swapClass: 'sortable-swap-highlight'
-        };
-      }
-      dragOver({
-        activeSortable,
-        target,
-        dragEl,
-        onMove,
-        completed,
-        cancel
-      }) {
-        let el = this.sortable.el,
-          options = this.options;
-        if (!activeSortable.options.swap || !target || target === el || target.contains(dragEl) || onMove(target) === false) {
-          swapValidEl && toggleClass(swapValidEl, options.swapClass, false);
-          swapValidEl = null;
-          completed(false);
-          cancel();
-        }
-      }
-      dragOverValid({
-        target,
-        changed,
-        completed,
-        cancel
-      }) {
-        let options = this.options;
-        if (swapValidEl && swapValidEl !== target) {
-          toggleClass(swapValidEl, options.swapClass, false);
-        }
-        toggleClass(target, options.swapClass, true);
-        swapValidEl = target;
-        changed();
-        completed(true);
-        cancel();
-      }
-      drop({
-        activeSortable,
-        putSortable,
-        dragEl
-      }) {
-        if (!swapValidEl) {
-          return;
-        }
-        let toSortable = putSortable || this.sortable,
-          options = this.options;
-        toggleClass(swapValidEl, options.swapClass, false);
-        if (options.swap || putSortable && putSortable.options.swap) {
-          toSortable.captureAnimationState();
-          if (toSortable !== activeSortable) {
-            activeSortable.captureAnimationState();
-          }
-          swapNodes(dragEl, swapValidEl);
-          toSortable.animateAll();
-          if (toSortable !== activeSortable) {
-            activeSortable.animateAll();
-          }
-        }
-      }
-      nulling() {
-        swapValidEl = null;
-      }
-    }
-    return _extends(Swap, {
-      pluginName: 'swap',
-      eventProperties() {
-        return {
-          swapItem: swapValidEl
-        };
-      }
-    });
-  }
-  function swapNodes(n1, n2) {
-    let p1 = n1.parentNode,
-      p2 = n2.parentNode,
-      i1,
-      i2;
-    if (!p1 || !p2 || p1.isEqualNode(n2) || p2.isEqualNode(n1)) {
-      return;
-    }
-    i1 = index(n1);
-    i2 = index(n2);
-    if (p1.isEqualNode(p2) && i1 < i2) {
-      i2++;
-    }
-    p1.insertBefore(n2, p1.children[i1]);
-    p2.insertBefore(n1, p2.children[i2]);
-  }
-
   let multiDragElements = [],
     multiDragClones = [],
     lastMultiDragSelect,
@@ -3281,54 +3187,8 @@
   Sortable.mount(new AutoScrollPlugin());
   Sortable.mount(Remove, Revert);
 
-  function CancelDragPlugin() {
-    class CancelDrag {
-      constructor() {
-        this.defaults = {
-          cancelDrag: true,
-          revertOnSpill: true
-        };
-      }
-      drop({
-        dispatchSortableEvent,
-        originalEvent,
-        dragEl,
-        cloneEl
-      }) {
-        // In case the 'ESC' key was hit,
-        // the origEvent is of type 'dragEnd'.
-        if (originalEvent.type === 'dragend') {
-          // Call revert on spill, to revert the drag
-          // using the existing algorithm.
-          this.sortable.revertOnSpill.onSpill(...arguments);
-
-          // Undo changes on the drag element.
-          if (dragEl) {
-            // Remove ghost & chosen class.
-            dragEl.classList.remove(this.options.ghostClass);
-            dragEl.classList.remove(this.options.chosenClass);
-            dragEl.removeAttribute('draggable');
-          }
-
-          // In case of a copy, the cloneEl
-          // has to be removed again.
-          if (cloneEl) {
-            cloneEl.remove();
-          }
-
-          // Dispatch 'end' event.
-          dispatchSortableEvent('end');
-        }
-      }
-    }
-    return _extends(CancelDrag, {
-      pluginName: 'cancelDrag'
-    });
-  }
-
-  Sortable.mount(new SwapPlugin());
+  // Sortable.mount(new Swap());
   Sortable.mount(new MultiDragPlugin());
-  Sortable.mount(new CancelDragPlugin());
 
   return Sortable;
 

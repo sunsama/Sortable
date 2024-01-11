@@ -3,17 +3,16 @@ export function CancelDragPlugin() {
 		constructor() {
 			this.defaults = {
 				cancelDrag: true,
-				revertOnSpill: true
 			};
 		}
-		drop({ dispatchSortableEvent, originalEvent, dragEl, cloneEl }) {
+		drop({ cancel, dispatchSortableEvent, originalEvent, dragEl, cloneEl }) {
 			// In case the 'ESC' key was hit,
 			// the origEvent is of type 'dragEnd'.
-			if (originalEvent.type === 'dragend') {
+			if (originalEvent?.type === 'dragend') {
 
 				// Call revert on spill, to revert the drag
 				// using the existing algorithm.
-				this.sortable.revertOnSpill.onSpill(...arguments);
+				this.sortable.revertOnSpill?.onSpill(...arguments);
 
 				// Undo changes on the drag element.
 				if (dragEl) {
@@ -31,6 +30,8 @@ export function CancelDragPlugin() {
 
 				// Dispatch 'end' event.
 				dispatchSortableEvent('end');
+
+				cancel();
 			}
 		}
 	}
