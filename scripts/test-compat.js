@@ -26,5 +26,3 @@ createTestCafe(null, 8000, 8001).then((tc) => {
 	failedCount = actualFailedCount;
     return testcafe.close();
 }).then(() => process.exit(failedCount));
-
-
