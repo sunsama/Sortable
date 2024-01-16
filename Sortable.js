@@ -2662,6 +2662,10 @@
       }
       nulling() {
         swapValidEl = null;
+        const keyEvent = new KeyboardEvent('keyup', {
+          key: 'Control'
+        }); // This will disable swapping (helps when releasing the key before finishing the drop/merge) -- which key it actually is sent doesn't matter
+        document.dispatchEvent(keyEvent);
       }
     }
     return _extends(Swap, {
