@@ -1,5 +1,5 @@
 /**!
- * Sortable 1.15.1
+ * Sortable 1.15.1-sunsama-1
  * @author	RubaXa   <trash@rubaxa.org>
  * @author	owenm    <owen23355@gmail.com>
  * @license MIT
@@ -19,7 +19,7 @@ function _extends() {
   return _extends.apply(this, arguments);
 }
 
-var version = "1.15.1";
+var version = "1.15.1-sunsama-1";
 
 function userAgent(pattern) {
   if (typeof window !== 'undefined' && window.navigator) {
@@ -874,7 +874,7 @@ const documentExists = typeof document !== 'undefined',
   _detectNearestEmptySortable = function (x, y) {
     let ret;
     sortables.some(sortable => {
-      const threshold = sortable[expando].options.emptyInsertThreshold;
+      const threshold = sortable[expando]?.options?.emptyInsertThreshold;
       if (!threshold || lastChild(sortable)) return;
       const rect = getRect(sortable),
         insideHorizontally = x >= rect.left - threshold && x <= rect.right + threshold,
@@ -1069,7 +1069,7 @@ function Sortable(el, options) {
 Sortable.prototype = /** @lends Sortable.prototype */{
   constructor: Sortable,
   _isOutsideThisEl: function (target) {
-    if (!this.el.contains(target) && target !== this.el) {
+    if (!this.el?.contains(target) && target !== this.el) {
       lastTarget = null;
     }
   },

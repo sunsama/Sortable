@@ -229,7 +229,7 @@ let dragEl,
 	_detectNearestEmptySortable = function(x, y) {
 		let ret;
 		sortables.some((sortable) => {
-			const threshold = sortable[expando].options.emptyInsertThreshold;
+			const threshold = sortable[expando]?.options?.emptyInsertThreshold;
 			if (!threshold || lastChild(sortable)) return;
 
 			const rect = getRect(sortable),
@@ -447,7 +447,7 @@ Sortable.prototype = /** @lends Sortable.prototype */ {
 	constructor: Sortable,
 
 	_isOutsideThisEl: function(target) {
-		if (!this.el.contains(target) && target !== this.el) {
+		if (!this.el?.contains(target) && target !== this.el) {
 			lastTarget = null;
 		}
 	},
