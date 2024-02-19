@@ -9,7 +9,7 @@ export default function AnimationStateManager() {
 		captureAnimationState() {
 			animationStates = [];
 			if (!this.options.animation) return;
-			let children = [].slice.call(this.el.children);
+			let children = this.el?.children ? [].slice.call(this.el.children) : [];
 
 			children.forEach(child => {
 				if (css(child, 'display') === 'none' || child === Sortable.ghost) return;
