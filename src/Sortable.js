@@ -161,17 +161,17 @@ let dragEl,
 
 	_detectDirection = function(el, options) {
 		let elCSS = css(el),
-			elWidth = parseInt(elCSS.width)
-				- parseInt(elCSS.paddingLeft)
-				- parseInt(elCSS.paddingRight)
-				- parseInt(elCSS.borderLeftWidth)
-				- parseInt(elCSS.borderRightWidth),
+			elWidth = parseInt(elCSS.width, 10)
+				- parseInt(elCSS.paddingLeft, 10)
+				- parseInt(elCSS.paddingRight, 10)
+				- parseInt(elCSS.borderLeftWidth, 10)
+				- parseInt(elCSS.borderRightWidth, 10),
 			child1 = getChild(el, 0, options),
 			child2 = getChild(el, 1, options),
 			firstChildCSS = child1 && css(child1),
 			secondChildCSS = child2 && css(child2),
-			firstChildWidth = firstChildCSS && parseInt(firstChildCSS.marginLeft) + parseInt(firstChildCSS.marginRight) + getRect(child1).width,
-			secondChildWidth = secondChildCSS && parseInt(secondChildCSS.marginLeft) + parseInt(secondChildCSS.marginRight) + getRect(child2).width;
+			firstChildWidth = firstChildCSS && parseInt(firstChildCSS.marginLeft, 10) + parseInt(firstChildCSS.marginRight, 10) + getRect(child1).width,
+			secondChildWidth = secondChildCSS && parseInt(secondChildCSS.marginLeft, 10) + parseInt(secondChildCSS.marginRight, 10) + getRect(child2).width;
 
 		if (elCSS.display === 'flex') {
 			return elCSS.flexDirection === 'column' || elCSS.flexDirection === 'column-reverse'
@@ -675,7 +675,7 @@ Sortable.prototype = /** @lends Sortable.prototype */ {
 	},
 
 	_disableDelayedDragEvents: function () {
-		let ownerDocument = this.el.ownerDocument;
+		let ownerDocument = this.el?.ownerDocument;
 		off(ownerDocument, 'mouseup', this._disableDelayedDrag);
 		off(ownerDocument, 'touchend', this._disableDelayedDrag);
 		off(ownerDocument, 'touchcancel', this._disableDelayedDrag);
@@ -907,7 +907,7 @@ Sortable.prototype = /** @lends Sortable.prototype */ {
 			container.appendChild(ghostEl);
 
 			// Set transform-origin
-			css(ghostEl, 'transform-origin', (tapDistanceLeft / parseInt(ghostEl.style.width) * 100) + '% ' + (tapDistanceTop / parseInt(ghostEl.style.height) * 100) + '%');
+			css(ghostEl, 'transform-origin', (tapDistanceLeft / parseInt(ghostEl.style.width, 10) * 100) + '% ' + (tapDistanceTop / parseInt(ghostEl.style.height, 10) * 100) + '%');
 		}
 	},
 
@@ -1327,7 +1327,7 @@ Sortable.prototype = /** @lends Sortable.prototype */ {
 	},
 
 	_offUpEvents: function () {
-		let ownerDocument = this.el.ownerDocument;
+		let ownerDocument = this.el?.ownerDocument;
 
 		off(ownerDocument, 'mouseup', this._onDrop);
 		off(ownerDocument, 'touchend', this._onDrop);
@@ -1391,11 +1391,23 @@ Sortable.prototype = /** @lends Sortable.prototype */ {
 				!options.dropBubble && evt.stopPropagation();
 			}
 
-			ghostEl && ghostEl.parentNode && ghostEl.parentNode.removeChild(ghostEl);
+			if (ghostEl?.parentNode) {
+				try {
+					ghostEl.parentNode.removeChild(ghostEl);
+				} catch (error) {
+					console.warn(`Failed to remove ghost child from parent node`, error);
+				}
+			}
 
 			if (rootEl === parentEl || (putSortable && putSortable.lastPutMode !== 'clone')) {
 				// Remove clone(s)
-				cloneEl && cloneEl.parentNode && cloneEl.parentNode.removeChild(cloneEl);
+				if (cloneEl?.parentNode) {
+					try {
+						cloneEl.parentNode.removeChild(cloneEl)
+					} catch (error) {
+						console.warn(`Failed to remove clone child from parent node`, error);
+					}
+				}
 			}
 
 			if (dragEl) {
@@ -1575,13 +1587,13 @@ Sortable.prototype = /** @lends Sortable.prototype */ {
 	toArray: function () {
 		let order = [],
 			el,
-			children = this.el.children,
+			children = this.el?.children,
 			i = 0,
 			n = children.length,
 			options = this.options;
 
 		for (; i < n; i++) {
-			el = children[i];
+			el = children ? children[i] : null;
 			if (closest(el, options.draggable, this.el, false)) {
 				order.push(el.getAttribute(options.dataIdAttr) || _generateId(el));
 			}
@@ -1609,7 +1621,11 @@ Sortable.prototype = /** @lends Sortable.prototype */ {
 		useAnimation && this.captureAnimationState();
 		order.forEach(function (id) {
 			if (items[id]) {
-				rootEl.removeChild(items[id]);
+				try {
+					rootEl.removeChild(items[id]);
+				} catch (error) {
+					console.warn(`Failed to remove child ${id}`, error);
+				}
 				rootEl.appendChild(items[id]);
 			}
 		});
@@ -1622,7 +1638,7 @@ Sortable.prototype = /** @lends Sortable.prototype */ {
 	 */
 	save: function () {
 		let store = this.options.store;
-		store && store.set && store.set(this);
+		store?.set && store.set(this);
 	},
 
 
@@ -1702,7 +1718,11 @@ Sortable.prototype = /** @lends Sortable.prototype */ {
 
 			css(cloneEl, 'display', 'none');
 			if (this.options.removeCloneOnHide && cloneEl.parentNode) {
-				cloneEl.parentNode.removeChild(cloneEl);
+				try {
+					cloneEl.parentNode.removeChild(cloneEl);
+				} catch (error) {
+					console.warn(`Failed to remove child from parent node`, error);
+				}
 			}
 			cloneHidden = true;
 		}
