@@ -1,5 +1,5 @@
 /**!
- * Sortable 1.15.1-sunsama-2
+ * Sortable 1.15.1-sunsama-3
  * @author	RubaXa   <trash@rubaxa.org>
  * @author	owenm    <owen23355@gmail.com>
  * @license MIT
@@ -25,7 +25,7 @@
     return _extends.apply(this, arguments);
   }
 
-  var version = "1.15.1-sunsama-2";
+  var version = "1.15.1-sunsama-3";
 
   function userAgent(pattern) {
     if (typeof window !== 'undefined' && window.navigator) {
@@ -228,7 +228,7 @@
 
   /**
    * Returns the content rect of the element (bounding rect minus border and padding)
-   * @param {HTMLElement} el 
+   * @param {HTMLElement} el
    */
   function getContentRect(el) {
     let rect = getRect(el);
@@ -284,7 +284,10 @@
   function getChild(el, childNum, options, includeDragEl) {
     let currentChild = 0,
       i = 0,
-      children = el.children;
+      children = el?.children;
+    if (!children) {
+      return null;
+    }
     while (i < children.length) {
       if (children[i].style.display !== 'none' && children[i] !== Sortable.ghost && (includeDragEl || children[i] !== Sortable.dragged) && closest(children[i], options.draggable, el, false)) {
         if (currentChild === childNum) {
