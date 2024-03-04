@@ -256,7 +256,7 @@ function getRect(el, relativeToContainingBlock, relativeToNonStaticParent, undoS
 
 /**
  * Returns the content rect of the element (bounding rect minus border and padding)
- * @param {HTMLElement} el 
+ * @param {HTMLElement} el
  */
 function getContentRect(el) {
 	let rect = getRect(el);
@@ -319,7 +319,11 @@ function isScrolledPast(el, elSide, parentSide) {
 function getChild(el, childNum, options, includeDragEl) {
 	let currentChild = 0,
 		i = 0,
-		children = el.children;
+		children = el?.children;
+
+	if (!children) {
+		return null;
+	}
 
 	while (i < children.length) {
 		if (
