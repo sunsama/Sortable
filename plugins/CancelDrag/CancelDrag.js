@@ -7,7 +7,7 @@ export function CancelDragPlugin() {
 		}
 		drop({ cancel, dispatchSortableEvent, originalEvent, dragEl, cloneEl }) {
 			// In case the 'ESC' key was hit, the originalEvent is of type 'dragEnd' (except for macOS chrome, where that will be sent if the element is dropped while pressing a key, like CMD, so we just disable this cancelling/reverting if swapping).
-			if (originalEvent?.type === 'dragend' && !this.options.swap) {
+			if (originalEvent?.type === 'dragend' && !this.options.swap && !this.options.sort) {
 				// Call revert on spill, to revert the drag using the existing algorithm.
 				this.sortable.revertOnSpill?.onSpill(...arguments);
 

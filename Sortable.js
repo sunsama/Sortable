@@ -1,5 +1,5 @@
 /**!
- * Sortable 1.15.1-sunsama-3
+ * Sortable 1.15.1-sunsama-4
  * @author	RubaXa   <trash@rubaxa.org>
  * @author	owenm    <owen23355@gmail.com>
  * @license MIT
@@ -25,7 +25,7 @@
     return _extends.apply(this, arguments);
   }
 
-  var version = "1.15.1-sunsama-3";
+  var version = "1.15.1-sunsama-4";
 
   function userAgent(pattern) {
     if (typeof window !== 'undefined' && window.navigator) {
@@ -3320,7 +3320,7 @@
         cloneEl
       }) {
         // In case the 'ESC' key was hit, the originalEvent is of type 'dragEnd' (except for macOS chrome, where that will be sent if the element is dropped while pressing a key, like CMD, so we just disable this cancelling/reverting if swapping).
-        if (originalEvent?.type === 'dragend' && !this.options.swap) {
+        if (originalEvent?.type === 'dragend' && !this.options.swap && !this.options.sort) {
           // Call revert on spill, to revert the drag using the existing algorithm.
           this.sortable.revertOnSpill?.onSpill(...arguments);
 
