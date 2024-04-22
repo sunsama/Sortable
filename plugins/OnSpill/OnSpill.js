@@ -39,7 +39,7 @@ Revert.prototype = {
 		if (nextSibling) {
 			this.sortable.el.insertBefore(dragEl, nextSibling);
 		} else {
-			this.sortable.el.appendChild(dragEl);
+			this.sortable.el?.appendChild(dragEl);
 		}
 		this.sortable.animateAll();
 		if (putSortable) {
