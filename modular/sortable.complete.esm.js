@@ -1,5 +1,5 @@
 /**!
- * Sortable 1.15.1-sunsama-3
+ * Sortable 1.15.1-sunsama-4
  * @author	RubaXa   <trash@rubaxa.org>
  * @author	owenm    <owen23355@gmail.com>
  * @license MIT
@@ -19,7 +19,7 @@ function _extends() {
   return _extends.apply(this, arguments);
 }
 
-var version = "1.15.1-sunsama-3";
+var version = "1.15.1-sunsama-4";
 
 function userAgent(pattern) {
   if (typeof window !== 'undefined' && window.navigator) {
@@ -2584,7 +2584,7 @@ Revert.prototype = {
     if (nextSibling) {
       this.sortable.el.insertBefore(dragEl, nextSibling);
     } else {
-      this.sortable.el.appendChild(dragEl);
+      this.sortable.el?.appendChild(dragEl);
     }
     this.sortable.animateAll();
     if (putSortable) {
